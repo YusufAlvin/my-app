@@ -1,0 +1,98 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import {FmlxTable, FmlxIcon} from 'fmlx-common-ui'
+import { useEffect, useMemo, useState } from 'react';
+
+function App() {
+  const [data, setData] = useState([]);
+
+  const generateDummyData = () => {
+    const data = [];
+
+    for (let i = 0; i < 50; i += 1) {
+      data.push({
+        id: (i + 1).toString(),
+        name: `Name Number ${i + 1}`,
+        type: `${(i % 3) + 1}`,
+      });
+    }
+
+    return data;
+  };
+
+  const columns = [
+    {
+      Header: 'ID',
+      accessor: 'id',
+      disableSort: false,
+      headerStyle: {
+        width: '10%',
+        minWidth: '10%',
+        maxWidth: '10%',
+      },
+    },
+    {
+      Header: 'Name',
+      accessor: 'name',
+      editable: false,
+      headerStyle: {
+        width: '30%',
+        minWidth: '30%',
+        maxWidth: '30%',
+      },
+    },
+    {
+      Header: 'Type',
+      accessor: 'type',
+      editable: false,
+      filterDefinition: {
+        type: FmlxTable.FilterType.DROPDOWN,
+        options: ['1', '2', '3'],
+      },
+      headerStyle: {
+        width: '20%',
+        minWidth: '20%',
+        maxWidth: '20%',
+      },
+    },
+    {
+      Header: 'Action',
+      accessor: 'action',
+      disableSort: true,
+      hideSort: true,
+      hideFilter: true,
+      Cell: () => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FmlxIcon name="Add" variant={FmlxIcon.Variant.COMMAND} />
+          &nbsp;
+          <FmlxIcon
+            name="Pencil"
+            variant={FmlxIcon.Variant.COMMAND}
+          />
+          &nbsp;
+          <FmlxIcon name="Trash" variant={FmlxIcon.Variant.COMMAND} />
+        </div>
+      ),
+    },
+  ]
+
+  useEffect(() => {
+    setData(generateDummyData())
+  }, [])
+
+  const dataMemoized = useMemo(() => data, [data]);
+  const columnsMemoized = useMemo(() => columns, [columns])
+
+  console.log(data)
+
+  return (
+    <div className="App">
+      <FmlxTable 
+        showPagination={false}
+        data={dataMemoized}
+        columns={columnsMemoized}
+      />  
+    </div>
+  );
+}
+
+export default App;
